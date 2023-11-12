@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.001">
+	<AliasPackage>
+		<Alias isActive="yes" isFolder="no">
+			<name>bite</name>
+			<script>hh = hh or {}
+
+hh.bite = {
+curse = {  
+ "paralysis",
+ "impatience",
+ "sensitivity",
+ "asthma",
+ "stupidity",
+ "weariness",
+ "recklessness"
+ }
+}
+hh.bite = {
+venoms = {
+    addiction = "vardrax",
+    anorexia = "slike",
+    asthma = "kalmia",
+    clumsiness = "xentio",
+    crippledarm = "epteth",
+    crippledleg = "epseth",
+    darkshade = "darkshade",
+    deafblind = "colocasia",
+    disloyalty = "monkshood",
+    dizziness = "larkspur",
+    haemophilia = "notechis",
+    nausea = "euphorbia",
+    paralysis = "curare",
+    recklessness = "eurypteria",
+    scytherus = "scytherus",
+    selarnia = "selarnia",
+    sensitivity = "prefarar",
+    shyness = "digitalis",
+    sleep = "delphinium",
+    slickness = "gecko",
+    stupidity = "aconite",
+    voyria = "voyria",
+    weariness = "vernalius"
+  }
+}
+
+
+local venom = hh.bite.venoms
+ 
+  local function venom_select()
+    local venom_priority = {
+      "asthma",
+      "slickness",
+      "paralysis",
+      "anorexia",
+      "weariness",
+      "recklessness",
+      "sensitivity"
+    }
+    for _, aff in ipairs(venom_priority) do
+      if affstrack.score[aff] &lt; 67 then
+        return venom[aff]
+      end
+    end    
+  end
+ 
+
+  
+local curse = hh.bite.curse
+ 
+  local function curse_select()
+    local curse_priority = {
+
+      "impatience",
+      "stupidity",
+      "paralysis",
+      "weariness",
+      "sensitivity"
+    }
+
+for _, aff in ipairs(curse_priority) do
+      if affstrack.score[aff] &lt; 67 then
+        return aff
+      end
+    end    
+  end
+
+if affstrack.score.prone == 100 and not bitetimer then
+  send("queue addclear free stand|dragoncurse "..target.." "..curse_select().." 1|bite "..target)
+elseif targetlyred == 1 then
+  send("queue addclear free stand|dragoncurse "..target.." "..curse_select().." 1|blast "..target)
+elseif ak.defs.shield then
+  send("queue addclear free stand|dragoncurse "..target.." "..curse_select().." 1|tailsmash "..target)
+elseif affstrack.score.deaf == 100 then
+  send("queue addclear free stand|dragoncurse "..target.." "..curse_select().." 1|dragonroar "..target)
+else
+ hh.Rends()
+ end
+
+
+</script>
+			<command></command>
+			<packageName></packageName>
+			<regex>^bite$</regex>
+		</Alias>
+	</AliasPackage>
+</MudletPackage>

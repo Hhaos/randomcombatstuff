@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE MudletPackage>
+<MudletPackage version="1.001">
+	<ScriptPackage>
+		<Script isActive="yes" isFolder="no">
+			<name>hh.Rends</name>
+			<packageName></packageName>
+			<script>-- Function to select venom and curse from hh.rends
+function hh.Rends()
+  local hh = {
+    curse = {  
+      ["impatience"] = "impatience",
+      ["asthma"] = "asthma",
+      ["weariness"] = "weariness",
+      ["recklessness"] = "recklessness",
+      ["stupidity"] = "stupidity",
+      ["sensitivity"] = "sensitivity"
+    },
+    venoms = {
+      ["paralysis"] = "curare",
+      ["asthma"] = "kalmia",
+      ["slickness"] = "gecko",
+      ["anorexia"] = "slike",
+      ["weariness"] = "vernalius",
+      ["recklessness"] = "eurypteria",
+      ["sensitivity"] = "prefarar"
+    }
+  }
+
+  local venom_priority = {
+    "paralysis",
+    "asthma",
+    "slickness",
+    "anorexia",
+    "weariness",
+    "recklessness",
+    "sensitivity"
+  }
+
+  local curse_priority = {
+    "paralysis",
+    "impatience",
+    "asthma",
+    "weariness",
+    "recklessness",
+    "stupidity",
+    "sensitivity"
+  }
+
+  local selectedVenom, venomName = nil, nil
+  local selectedCurse, curseName = nil, nil
+
+  -- Set default values for venom and curse
+  selectedVenom, venomName = "paralysis", hh.venoms["paralysis"]
+  selectedCurse, curseName = "impatience", hh.curse["impatience"]
+
+  -- Select venom based on priority and conditions
+  for _, aff in ipairs(venom_priority) do
+    if affstrack.score[aff] &lt; 67 then
+      selectedVenom, venomName = aff, hh.venoms[aff]
+      break
+    end
+  end
+
+  -- Select curse based on priority and conditions
+  for _, aff in ipairs(curse_priority) do
+    if hh.curse[aff] and affstrack.score[aff] &lt; 67 then
+      selectedCurse, curseName = aff, hh.curse[aff]
+      break
+    end
+  end
+
+  -- Send the command with both venom and curse if curseName is defined
+  if curseName then
+    send('queue addclear free rend '..target..' '.. limbtarget ..' '.. venomName .. '|dragoncurse '..target..' ' .. curseName .. ' 1|breathgust '..target)
+  else
+    -- If curseName is not defined, send only the venom-related part
+    send('queue addclear free rend '..target..' '.. limbtarget ..' '.. venomName .. '|breathgust '..target)
+  end
+end
+</script>
+			<eventHandlerList />
+		</Script>
+	</ScriptPackage>
+</MudletPackage>
